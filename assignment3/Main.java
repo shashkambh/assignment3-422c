@@ -64,7 +64,7 @@ public class Main {
         String in = keyboard.next();
 
         if(!in.equals("/quit")){
-            String end = keyboard.nextLine();
+            String end = keyboard.nextLine().trim();
             userCommand.add(in.toUpperCase());
             userCommand.add(end.toUpperCase());
         }
@@ -74,7 +74,6 @@ public class Main {
 	
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
 		ArrayList<String> ladder = new ArrayList<>();
-        boolean found=false;
 
 		Set<String> dict = makeDictionary();
 		
@@ -87,9 +86,9 @@ public class Main {
         } 
 
         for(int i = 0; i < ladder.size() - 1; i++){
-            for(int j = i; j < ladder.size(); j++){
+            for(int j = i + 1; j < ladder.size(); j++){
                 if(ladder.get(i).equals(ladder.get(j))){
-                    for(int toRemove = j-1; j>=i; j--){
+                    for(int toRemove = j; j > i; j--){
                         ladder.remove(toRemove);
                     }
                 }
@@ -116,8 +115,6 @@ public class Main {
                     
                     if(dict.contains(next.toString()) && !currentLadder.contains(next.toString())){
 
-                        System.out.println(next.toString());
-
                         currentLadder = DFSHelper(currentLadder, next, end, dict);
                         if(currentLadder.get(currentLadder.size() - 1).equals(end)){
                             found = true; 
@@ -127,9 +124,12 @@ public class Main {
                 }
             }
 
+        } else {
+        	found = true;
         }
-
-        currentLadder.remove(currentLadder.size() - 1);
+        if(!found){
+            currentLadder.remove(currentLadder.size() - 1);
+        }
         
         return currentLadder;
     }
@@ -162,6 +162,4 @@ public class Main {
 	public static void printLadder(ArrayList<String> ladder) {
 		
 	}
-	// TODO
-	// Other private static methods here
 }
