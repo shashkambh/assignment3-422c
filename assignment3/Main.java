@@ -22,6 +22,8 @@ public class Main {
 	// static variables and constants only here.
 	
     private static final int LETTERS_IN_ALPHABET = 26;
+    private static String INPUT1 = "";
+    private static String INPUT2 = "";
 
 	public static void main(String[] args) throws Exception {
 		
@@ -41,9 +43,11 @@ public class Main {
         ArrayList<String> input = parse(kb);
 
         while(!input.isEmpty()){
-            ArrayList<String> ladderdfs = getWordLadderDFS(input.get(0), input.get(1));
+        	INPUT1 = input.get(0);
+        	INPUT2 = input.get(1);
+            ArrayList<String> ladderdfs = getWordLadderDFS(INPUT1, INPUT2);
             
-            ArrayList<String> ladderbfs = getWordLadderBFS(input.get(0), input.get(1));
+            ArrayList<String> ladderbfs = getWordLadderBFS(INPUT1, INPUT2);
 	    
             printLadder(ladderbfs);
             printLadder(ladderdfs);
@@ -114,12 +118,12 @@ public class Main {
             }
         }
 
-        if(ladder == null){
+        /*if(ladder == null){
             ladder = new ArrayList<String>();
             String out = ("no word ladder can be found between " 
                     + start.toLowerCase() + " and " + end.toLowerCase() + ".");
             ladder.add(out);
-        }
+        }*/
 
         return ladder;
 	}
@@ -222,9 +226,10 @@ public class Main {
 			}
 			Collections.reverse(ladder);
         } else {
-            ladder = new ArrayList<String>();
+		ladder = null;
+            /*ladder = new ArrayList<String>();
             String out = ("no word ladder can be found between " + start.toLowerCase() + " and " + end.toLowerCase() + ".");
-            ladder.add(out);
+            ladder.add(out);*/
         }
     	return ladder; 
     }
@@ -246,8 +251,7 @@ public class Main {
 	}
 	
 	public static void printLadder(ArrayList<String> ladder) {
-        if(ladder.size() >= 2){
-
+        if(ladder != null){
             System.out.println("a " + (ladder.size() - 2) + "-rung word ladder exists between " 
                     + ladder.get(0).toLowerCase() + " and " 
                     + ladder.get(ladder.size() - 1).toLowerCase() + ".");
@@ -255,8 +259,8 @@ public class Main {
             for(String e : ladder){
                 System.out.println(e.toLowerCase());
             }
-        } else if(ladder.size() == 1) {
-            System.out.println(ladder.get(0));
+        } else {
+            System.out.println("no word ladder can be found between " + INPUT1.toLowerCase() + " and " + INPUT2.toLowerCase() + ".");
         }
 
     }
