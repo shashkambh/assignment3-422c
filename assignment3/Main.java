@@ -91,6 +91,7 @@ public class Main {
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
 		Set<String> dict = makeDictionary();
 		
+        // Don't allow the start word to appear again
         dict.remove(start);
 
 
@@ -98,6 +99,8 @@ public class Main {
 
         ArrayList<String> ladder = null;
 
+        // Try going forward. If that fails, go backwards.
+        // If both fail, then give up
         try{
             ladder = DFSHelper(startPoint, end, dict);
 
@@ -120,13 +123,18 @@ public class Main {
 	public static ArrayList<String> DFSHelper(StringBuilder start, String end, Set<String> dict){
 		ArrayList <String> ladder = null;
 		boolean found = false;
+
+        // If start equals end, finish
 		if(start.toString().equals(end)){
 			ladder=new ArrayList<String>();
 			ladder.add(end);
 		} else {
+            //First check for any words that share letters with end
             for(int i = 0; i < start.length() && !found; i++){
                 StringBuilder next = new StringBuilder(start.toString());
                 next.setCharAt(i, end.charAt(i));
+
+                //If a given word is in dicitonary, try going along that path
                 if(dict.contains(next.toString())){
                     dict.remove(next.toString());
                     ladder = DFSHelper(next, end, dict);
@@ -136,7 +144,8 @@ public class Main {
                     }
                 }
             }
-
+            
+            //If no such words are found, go in some random direction
             for(int i = 0; i < start.length() && !found; i++){
 				
                 for(int j = 0; j < LETTERS_IN_ALPHABET && !found; j++){
@@ -144,6 +153,7 @@ public class Main {
 
                     next.setCharAt(i, (char)('A' + j));
                     
+                    //If a given word is in dicitonary, try going along that path
                     if(dict.contains(next.toString())){
 						dict.remove(next.toString());
                         ladder = DFSHelper(next, end, dict);
@@ -167,8 +177,13 @@ public class Main {
     	StringBuilder currentLadder = new StringBuilder(start);
     	ArrayList<String> checked = new ArrayList<String>();
     	Set<String> dict = makeDictionary(); 
+<<<<<<< HEAD
+    	boolean found = false;
+
+=======
     	
 	boolean found = false;
+>>>>>>> e87888d56ee0db3795ffed1bcdca17cc9d4e022d
     	String letSee = start;
     	checked.add(start);
     	if(!currentLadder.toString().equals(end) && dict.contains(start) && dict.contains(end)){
@@ -183,17 +198,42 @@ public class Main {
 	    					 queue.add(next.toString());		//adds all combinations(adjacent)
 						 if(next.toString().equals(end)){
 							 checked.add(next.toString());
+<<<<<<< HEAD
+                             found = true;
+=======
 							 found = true;
+>>>>>>> e87888d56ee0db3795ffed1bcdca17cc9d4e022d
 							 break outerloop;
 						 }
 	    				 }
 	    			}
 	    		}
-	    		letSee = queue.get(0);
-	    		checked.add(queue.get(0));					//FIFO
-	    		queue.remove(0);							//FIFO
+                if(!queue.isEmpty()){
+                    letSee = queue.get(0);
+                    checked.add(queue.get(0));					//FIFO
+                    queue.remove(0);							//FIFO
+                } else {
+                    checked = null;
+                    break outerloop;
+                }
 	    	}
     	}
+<<<<<<< HEAD
+        if(found){
+            
+            for(int k = checked.size()-1; k > 0; k--){//for loop
+                int cnt = 0;
+                for(int m = 0; m<currentLadder.length(); m++){
+                    if(checked.get(k).charAt(m) == checked.get(k-1).charAt(m)){
+                        cnt++;
+                    }
+                }
+                if(cnt != (currentLadder.length()-1)){
+                    checked.remove(k-1);
+                }
+            }
+        }    
+=======
 	if(found){    
 		for(int k = checked.size()-1; k > 0; k--){//for loop
 			int cnt = 0;
@@ -209,8 +249,9 @@ public class Main {
 	}
 	else
 		checked = null;
+>>>>>>> e87888d56ee0db3795ffed1bcdca17cc9d4e022d
     	
-    	return checked; // replace this line later with real return
+    	return checked; 
 	}
     
 	public static Set<String>  makeDictionary () {
