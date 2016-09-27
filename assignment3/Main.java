@@ -41,14 +41,24 @@ public class Main {
         ArrayList<String> input = parse(kb);
 
         while(!input.isEmpty()){
-            ArrayList<String> ladder = getWordLadderDFS(input.get(0), input.get(1));
+            ArrayList<String> ladderdfs = getWordLadderDFS(input.get(0), input.get(1));
+            
+            ArrayList<String> ladderbfs = getWordLadderBFS(input.get(0), input.get(1));
 
-            if(ladder != null){
-                printLadder(ladder);
+            if(ladderdfs != null){
+                printLadder(ladderdfs);
             } else {
                 System.out.println("no word ladder can be found between " + 
                         input.get(0).toLowerCase() + " and " + input.get(1).toLowerCase() + ".");
             }
+            
+            if(ladderbfs != null){
+                printLadder(ladderbfs);
+            } else {
+                System.out.println("no word ladder can be found between " + 
+                        input.get(0).toLowerCase() + " and " + input.get(1).toLowerCase() + ".");
+            }
+
             input = parse(kb);
         }
 	}
@@ -83,11 +93,25 @@ public class Main {
 		
         dict.remove(start);
 
+
         StringBuilder startPoint = new StringBuilder(start);
 
-		ArrayList<String> ladder = DFSHelper(startPoint, end, dict);
-        if(ladder != null){
-            Collections.reverse(ladder);
+        ArrayList<String> ladder = null;
+
+        try{
+            ladder = DFSHelper(startPoint, end, dict);
+
+            if(ladder != null){
+                Collections.reverse(ladder);
+            }
+        } catch(StackOverflowError e){
+            try{
+                dict = makeDictionary();
+                StringBuilder endPoint = new StringBuilder(end);
+                ladder = DFSHelper(endPoint, start, dict);
+            } catch(StackOverflowError e2){
+                ladder = null;
+            }
         }
 
         return ladder;
