@@ -168,11 +168,12 @@ public class Main {
     	ArrayList<String> checked = new ArrayList<String>();
     	Set<String> dict = makeDictionary(); 
     	
+	boolean found = false;
     	String letSee = start;
     	checked.add(start);
     	if(!currentLadder.toString().equals(end)){
 		outerloop:
-	    	while(!checked.contains(end)){  //change condition
+	    	while(!checked.contains(end) && dict.contains(start) && dict.contains(end)){  //change condition
 	    		for(int i = 0; i<currentLadder.length(); i++){
 	    			for(int j = 0; j < LETTERS_IN_ALPHABET; j++){
 	    				StringBuilder next = new StringBuilder(letSee);
@@ -182,6 +183,7 @@ public class Main {
 	    					 queue.add(next.toString());		//adds all combinations(adjacent)
 						 if(next.toString().equals(end)){
 							 checked.add(next.toString());
+							 found = true;
 							 break outerloop;
 						 }
 	    				 }
@@ -192,18 +194,21 @@ public class Main {
 	    		queue.remove(0);							//FIFO
 	    	}
     	}
-	    
-	for(int k = checked.size()-1; k > 0; k--){//for loop
-        	int cnt = 0;
-    		for(int m = 0; m<currentLadder.length(); m++){
-    			if(checked.get(k).charAt(m) == checked.get(k-1).charAt(m)){
-    				cnt++;
-    			}
-    		}
-    		if(cnt != (currentLadder.length()-1)){
-    			checked.remove(k-1);
-    		}
-    	}
+	if(found){    
+		for(int k = checked.size()-1; k > 0; k--){//for loop
+			int cnt = 0;
+			for(int m = 0; m<currentLadder.length(); m++){
+				if(checked.get(k).charAt(m) == checked.get(k-1).charAt(m)){
+					cnt++;
+				}
+			}
+			if(cnt != (currentLadder.length()-1)){
+				checked.remove(k-1);
+			}
+		}
+	}
+	else
+		checked = null;
     	
     	return checked; // replace this line later with real return
 	}
