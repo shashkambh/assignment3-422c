@@ -221,7 +221,8 @@ public class Main {
                     checked.remove(k-1);
                 }
             }
-        }    
+        } else
+		checked = null;
     	return checked; 
     }
     
