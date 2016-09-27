@@ -76,11 +76,20 @@ public class Main {
         ArrayList<String> userCommand = new ArrayList<>();
 
         String in = keyboard.next();
+        while(in.length() != 5){
+            in = keyboard.next();
+        }
 
         if(!in.equals("/quit")){
             String end = keyboard.nextLine().trim();
-            userCommand.add(in.toUpperCase());
-            userCommand.add(end.toUpperCase());
+            while(end.length() != 5){
+                end = keyboard.next();
+            }
+
+            if(!end.equals("/quit")){
+                userCommand.add(in.toUpperCase());
+                userCommand.add(end.toUpperCase());
+            }
         }
 
         return userCommand;
