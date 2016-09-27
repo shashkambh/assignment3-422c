@@ -147,6 +147,7 @@ public class Main {
     	String letSee = start;
     	checked.add(start);
     	if(!currentLadder.toString().equals(end)){
+		outerloop:
 	    	while(!checked.contains(end)){  //change condition
 	    		for(int i = 0; i<currentLadder.length(); i++){
 	    			for(int j = 0; j < LETTERS_IN_ALPHABET; j++){
@@ -155,6 +156,10 @@ public class Main {
 	    				next.setCharAt(i, (char)('A' + j));
 	    				 if(dict.contains(next.toString()) && !checked.contains(next.toString()) && !queue.contains(next.toString())){
 	    					 queue.add(next.toString());		//adds all combinations(adjacent)
+						 if(next.toString().equals(end)){
+							 checked.add(next.toString());
+							 break outerloop;
+						 }
 	    				 }
 	    			}
 	    		}
@@ -162,6 +167,18 @@ public class Main {
 	    		checked.add(queue.get(0));					//FIFO
 	    		queue.remove(0);							//FIFO
 	    	}
+    	}
+	    
+	for(int k = checked.size()-1; k > 0; k--){//for loop
+        	int cnt = 0;
+    		for(int m = 0; m<currentLadder.length(); m++){
+    			if(checked.get(k).charAt(m) == checked.get(k-1).charAt(m)){
+    				cnt++;
+    			}
+    		}
+    		if(cnt != (currentLadder.length()-1)){
+    			checked.remove(k-1);
+    		}
     	}
     	
     	return checked; // replace this line later with real return
