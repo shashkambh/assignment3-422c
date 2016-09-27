@@ -203,7 +203,6 @@ public class Main {
                     checked.add(queue.get(0));					//FIFO
                     queue.remove(0);							//FIFO
                 } else {
-                    checked = null;
                     break outerloop;
                 }
 	    	}
@@ -221,8 +220,9 @@ public class Main {
                     checked.remove(k-1);
                 }
             }
-        } else
-		checked = null;
+        } else {
+            checked = null;
+        }
     	return checked; 
     }
     
