@@ -42,7 +42,7 @@ public class Main {
 
         while(!input.isEmpty()){
             ArrayList<String> ladder = getWordLadderDFS(input.get(0), input.get(1));
-            ps.println(ladder);
+            printLadder(input, ladder, ps);
             input = parse(kb);
         }
 	}
@@ -73,66 +73,63 @@ public class Main {
 	}
 	
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
-		ArrayList<String> ladder = new ArrayList<>();
-
 		Set<String> dict = makeDictionary();
 		
+        dict.remove(start);
+
         StringBuilder startPoint = new StringBuilder(start);
 
-        ladder = DFSHelper(ladder, startPoint, end, dict);
-
-        if(start.equals(end)){
-            ladder.add(start);
-        } 
-
-        for(int i = 0; i < ladder.size() - 1; i++){
-            for(int j = i + 1; j < ladder.size(); j++){
-                if(ladder.get(i).equals(ladder.get(j))){
-                    for(int toRemove = j; j > i; j--){
-                        ladder.remove(toRemove);
-                    }
-                }
-            }
+		ArrayList<String> ladder = DFSHelper(startPoint, end, dict);
+        if(ladder != null){
+            Collections.reverse(ladder);
         }
-        
 
-        
         return ladder;
 	}
 
-    public static ArrayList<String> DFSHelper(ArrayList<String> currentLadder, StringBuilder start, String end, Set<String> dict){
-        boolean found = false;
-        
-        currentLadder.add(start.toString());
+	public static ArrayList<String> DFSHelper(StringBuilder start, String end, Set<String> dict){
+		ArrayList <String> ladder = null;
+		boolean found = false;
+		if(start.toString().equals(end)){
+			ladder=new ArrayList<String>();
+			ladder.add(end);
+		} else {
+            for(int i = 0; i < start.length() && !found; i++){
+                StringBuilder next = new StringBuilder(start.toString());
+                next.setCharAt(i, end.charAt(i));
+                if(dict.contains(next.toString())){
+                    dict.remove(next.toString());
+                    ladder = DFSHelper(next, end, dict);
+                    if(ladder != null){
+                        found = true;
+                        ladder.add(start.toString());
+                    }
+                }
+            }
 
-        if(!start.toString().equals(end)){
-            for(int i = 0; i < start.length(); i++){
-                
+            for(int i = 0; i < start.length() && !found; i++){
+				
                 for(int j = 0; j < LETTERS_IN_ALPHABET && !found; j++){
                     StringBuilder next = new StringBuilder(start.toString());
 
                     next.setCharAt(i, (char)('A' + j));
                     
-                    if(dict.contains(next.toString()) && !currentLadder.contains(next.toString())){
-
-                        currentLadder = DFSHelper(currentLadder, next, end, dict);
-                        if(currentLadder.get(currentLadder.size() - 1).equals(end)){
-                            found = true; 
-                            currentLadder.add(0, start.toString());
-                        }
+                    if(dict.contains(next.toString())){
+						dict.remove(next.toString());
+                        ladder = DFSHelper(next, end, dict);
+						if(ladder != null){
+							found = true;
+							ladder.add(start.toString());
+						}
                     }
+					
                 }
             }
 
-        } else {
-        	found = true;
-        }
-        if(!found){
-            currentLadder.remove(currentLadder.size() - 1);
-        }
+        } 
         
-        return currentLadder;
-    }
+        return ladder;
+	}
 	
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
 		
@@ -159,7 +156,17 @@ public class Main {
 		return words;
 	}
 	
-	public static void printLadder(ArrayList<String> ladder) {
-		
+	public static void printLadder(ArrayList<String> input, ArrayList<String> ladder, PrintStream out) {
+        if(ladder != null){
+            out.println("a " + (ladder.size() - 2) + "-rung word ladder exists between " 
+                    + ladder.get(0).toLowerCase() + " and " + ladder.get(ladder.size() - 1).toLowerCase() + ".");
+
+            for(String e : ladder){
+                out.println(e.toLowerCase());
+            }
+        } else {
+            out.println("no word ladder can be found between " + input.get(0).toLowerCase() 
+                    + " and " + input.get(1).toLowerCase() + ".");
+        }
 	}
 }
