@@ -139,11 +139,32 @@ public class Main {
 	
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
 		
-		// TODO some code
-		Set<String> dict = makeDictionary();
-		// TODO more code
-		
-		return null; // replace this line later with real return
+    	ArrayList<String> queue = new ArrayList<String>();
+    	StringBuilder currentLadder = new StringBuilder(start);
+    	ArrayList<String> checked = new ArrayList<String>();
+    	Set<String> dict = makeDictionary(); 
+    	
+    	String letSee = start;
+    	checked.add(start);
+    	if(!currentLadder.toString().equals(end)){
+	    	while(!checked.contains(end)){  //change condition
+	    		for(int i = 0; i<currentLadder.length(); i++){
+	    			for(int j = 0; j < LETTERS_IN_ALPHABET; j++){
+	    				StringBuilder next = new StringBuilder(letSee);
+	
+	    				next.setCharAt(i, (char)('A' + j));
+	    				 if(dict.contains(next.toString()) && !checked.contains(next.toString()) && !queue.contains(next.toString())){
+	    					 queue.add(next.toString());		//adds all combinations(adjacent)
+	    				 }
+	    			}
+	    		}
+	    		letSee = queue.get(0);
+	    		checked.add(queue.get(0));					//FIFO
+	    		queue.remove(0);							//FIFO
+	    	}
+    	}
+    	
+    	return checked; // replace this line later with real return
 	}
     
 	public static Set<String>  makeDictionary () {
