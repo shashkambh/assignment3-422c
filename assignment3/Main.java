@@ -45,19 +45,8 @@ public class Main {
             
             ArrayList<String> ladderbfs = getWordLadderBFS(input.get(0), input.get(1));
 
-            if(ladderdfs != null){
-                printLadder(ladderdfs);
-            } else {
-                System.out.println("no word ladder can be found between " + 
-                        input.get(0).toLowerCase() + " and " + input.get(1).toLowerCase() + ".");
-            }
-            
-            if(ladderbfs != null){
-                printLadder(ladderbfs);
-            } else {
-                System.out.println("no word ladder can be found between " + 
-                        input.get(0).toLowerCase() + " and " + input.get(1).toLowerCase() + ".");
-            }
+            printLadder(ladderdfs);
+            printLadder(ladderbfs);
 
             input = parse(kb);
         }
@@ -244,9 +233,16 @@ public class Main {
 	}
 	
 	public static void printLadder(ArrayList<String> ladder) {
-        System.out.println("a " + (ladder.size() - 2) + "-rung word ladder exists between " 
-                + ladder.get(0).toLowerCase() + " and " 
-                + ladder.get(ladder.size() - 1).toLowerCase() + ".");
+		 if(ladder != null){
+                	System.out.println("a " + (ladder.size() - 2) + "-rung word ladder exists between " 
+               		 + ladder.get(0).toLowerCase() + " and " 
+               		 + ladder.get(ladder.size() - 1).toLowerCase() + ".");
+           	 } else {
+                	System.out.println("no word ladder can be found between " + 
+                        input.get(0).toLowerCase() + " and " + input.get(1).toLowerCase() + ".");
+			 return;
+            	}
+        
 
         for(String e : ladder){
             System.out.println(e.toLowerCase());
