@@ -177,13 +177,9 @@ public class Main {
     	StringBuilder currentLadder = new StringBuilder(start);
     	ArrayList<String> checked = new ArrayList<String>();
     	Set<String> dict = makeDictionary(); 
-<<<<<<< HEAD
     	boolean found = false;
 
-=======
     	
-	boolean found = false;
->>>>>>> e87888d56ee0db3795ffed1bcdca17cc9d4e022d
     	String letSee = start;
     	checked.add(start);
     	if(!currentLadder.toString().equals(end) && dict.contains(start) && dict.contains(end)){
@@ -196,14 +192,10 @@ public class Main {
 	    				next.setCharAt(i, (char)('A' + j));
 	    				 if(dict.contains(next.toString()) && !checked.contains(next.toString()) && !queue.contains(next.toString())){
 	    					 queue.add(next.toString());		//adds all combinations(adjacent)
-						 if(next.toString().equals(end)){
-							 checked.add(next.toString());
-<<<<<<< HEAD
-                             found = true;
-=======
-							 found = true;
->>>>>>> e87888d56ee0db3795ffed1bcdca17cc9d4e022d
-							 break outerloop;
+                             if(next.toString().equals(end)){
+                                 checked.add(next.toString());
+                                 found = true;
+                                 break outerloop;
 						 }
 	    				 }
 	    			}
@@ -218,7 +210,6 @@ public class Main {
                 }
 	    	}
     	}
-<<<<<<< HEAD
         if(found){
             
             for(int k = checked.size()-1; k > 0; k--){//for loop
@@ -233,26 +224,8 @@ public class Main {
                 }
             }
         }    
-=======
-	if(found){    
-		for(int k = checked.size()-1; k > 0; k--){//for loop
-			int cnt = 0;
-			for(int m = 0; m<currentLadder.length(); m++){
-				if(checked.get(k).charAt(m) == checked.get(k-1).charAt(m)){
-					cnt++;
-				}
-			}
-			if(cnt != (currentLadder.length()-1)){
-				checked.remove(k-1);
-			}
-		}
-	}
-	else
-		checked = null;
->>>>>>> e87888d56ee0db3795ffed1bcdca17cc9d4e022d
-    	
     	return checked; 
-	}
+    }
     
 	public static Set<String>  makeDictionary () {
 		Set<String> words = new HashSet<String>();
