@@ -171,9 +171,9 @@ public class Main {
 	boolean found = false;
     	String letSee = start;
     	checked.add(start);
-    	if(!currentLadder.toString().equals(end)){
+    	if(!currentLadder.toString().equals(end) && dict.contains(start) && dict.contains(end)){
 		outerloop:
-	    	while(!checked.contains(end) && dict.contains(start) && dict.contains(end)){  //change condition
+	    	while(!checked.contains(end) && (start.length() == end.length())){  //change condition
 	    		for(int i = 0; i<currentLadder.length(); i++){
 	    			for(int j = 0; j < LETTERS_IN_ALPHABET; j++){
 	    				StringBuilder next = new StringBuilder(letSee);
