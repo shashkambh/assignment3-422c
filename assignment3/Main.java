@@ -45,18 +45,8 @@ public class Main {
             
             ArrayList<String> ladderbfs = getWordLadderBFS(input.get(0), input.get(1));
 	    
-	    if(ladderdfs != null){
-                	printLadder(ladderdfs);
-           	 } else {
-                	System.out.println("no word ladder can be found between " + 
-                        input.get(0).toLowerCase() + " and " + input.get(1).toLowerCase() + ".");
-            	}
-	    if(ladderbfs != null){
-                	 printLadder(ladderbfs);
-           	 } else {
-                	System.out.println("no word ladder can be found between " + 
-                        input.get(0).toLowerCase() + " and " + input.get(1).toLowerCase() + ".");
-            	}
+            printLadder(ladderbfs);
+            printLadder(ladderdfs);
             input = parse(kb);
         }
 	}
@@ -122,6 +112,13 @@ public class Main {
             } catch(StackOverflowError e2){
                 ladder = null;
             }
+        }
+
+        if(ladder == null){
+            ladder = new ArrayList<String>();
+            String out = ("no word ladder can be found between " 
+                    + start.toLowerCase() + " and " + end.toLowerCase() + ".");
+            ladder.add(out);
         }
 
         return ladder;
@@ -225,7 +222,10 @@ public class Main {
 			}
 			Collections.reverse(ladder);
         } else {
-            ladder = null;
+            ladder = new ArrayList<String>();
+            String out = ("no word ladder can be found between " 
+                    + start.toLowerCase() + " and " + end.toLowerCase() + ".");
+            ladder.add(out);
         }
     	return ladder; 
     }
@@ -247,16 +247,18 @@ public class Main {
 	}
 	
 	public static void printLadder(ArrayList<String> ladder) {
-		
-		
-                	System.out.println("a " + (ladder.size() - 2) + "-rung word ladder exists between " 
-               		 + ladder.get(0).toLowerCase() + " and " 
-               		 + ladder.get(ladder.size() - 1).toLowerCase() + ".");
-           	 
-        
+        if(ladder.size() >= 2){
 
-        for(String e : ladder){
-            System.out.println(e.toLowerCase());
-	    }
+            System.out.println("a " + (ladder.size() - 2) + "-rung word ladder exists between " 
+                    + ladder.get(0).toLowerCase() + " and " 
+                    + ladder.get(ladder.size() - 1).toLowerCase() + ".");
+
+            for(String e : ladder){
+                System.out.println(e.toLowerCase());
+            }
+        } else if(ladder.size() == 1) {
+            System.out.println(ladder.get(0));
+        }
+
     }
 }
