@@ -223,8 +223,7 @@ public class Main {
 			Collections.reverse(ladder);
         } else {
             ladder = new ArrayList<String>();
-            String out = ("no word ladder can be found between " 
-                    + start.toLowerCase() + " and " + end.toLowerCase() + ".");
+            String out = ("no word ladder can be found between " + start.toLowerCase() + " and " + end.toLowerCase() + ".");
             ladder.add(out);
         }
     	return ladder; 
