@@ -1,14 +1,13 @@
 /* WORD LADDER Main.java
  * EE422C Project 3 submission by
- * Replace <...> with your actual data.
- * <Student1 Name>
- * <Student1 EID>
- * <Student1 5-digit Unique No.>
+ * Shashank Kambhampati
+ * skk834
+ * 16445 
  * Manuel Lopez
  * ml36724
  * 16480
- * Slip days used: <0>
- * Git URL:
+ * Slip days used: 0
+ * Git URL: https://github.com/shashkambh/assignment3-422c.git
  * Fall 2016
  */
 
@@ -25,46 +24,44 @@ public class Main {
     private static String INPUT1 = "";
     private static String INPUT2 = "";
 
+    /**
+     * Waits for input from user and performs both DFS and BFS on the two words given.
+     * @param args The command line args. Not used.
+     */
 	public static void main(String[] args) throws Exception {
 		
 		Scanner kb;	// input Scanner for commands
-		PrintStream ps;	// output file
-		// If arguments are specified, read/write from/to files instead of Std IO.
-		if (args.length != 0) {
-			kb = new Scanner(new File(args[0]));
-			ps = new PrintStream(new File(args[1]));
-			System.setOut(ps);			// redirect output to ps
-		} else {
-			kb = new Scanner(System.in);// default from Stdin
-			ps = System.out;			// default to Stdout
-		}
+        kb = new Scanner(System.in);// default from Stdin
 		initialize();
 		
         ArrayList<String> input = parse(kb);
-
+        
+        // Keep going as long as parse returns two words
         while(!input.isEmpty()){
         	INPUT1 = input.get(0);
         	INPUT2 = input.get(1);
+
+            // Perform BFS and DFS
             ArrayList<String> ladderdfs = getWordLadderDFS(INPUT1, INPUT2);
-            
             ArrayList<String> ladderbfs = getWordLadderBFS(INPUT1, INPUT2);
-	    
+	        
+            // Output to standard out
             printLadder(ladderbfs);
             printLadder(ladderdfs);
             input = parse(kb);
         }
 	}
 	
-	public static void initialize() {
-		// initialize your static variables or constants here.
-		// We will call this method before running our JUNIT tests.  So call it 
-		// only once at the start of main.
-	}
+    /**
+     * Empty function, supposed to initialize constants.
+     * Never used.
+     */
+	public static void initialize() { }
 	
 	/**
 	 * @param keyboard Scanner connected to System.in
 	 * @return ArrayList of 2 Strings containing start word and end word. 
-	 * If command is /quit, return empty ArrayList. 
+	 * If word is /quit, return empty ArrayList. 
 	 */
 	public static ArrayList<String> parse(Scanner keyboard) {
         ArrayList<String> userCommand = new ArrayList<>();
@@ -88,20 +85,25 @@ public class Main {
 
         return userCommand;
 	}
-	
+
+	/**
+     * Performs a depth first search on two given words for a word ladder between them.
+     * @param start The word used for the start of the search
+     * @param end The word to be searched for
+     * @return A word ladder between the two if found, else an empty ArrayList.
+     */
 	public static ArrayList<String> getWordLadderDFS(String start, String end) {
 		Set<String> dict = makeDictionary();
 		
         // Don't allow the start word to appear again
         dict.remove(start);
 
-
         StringBuilder startPoint = new StringBuilder(start);
 
         ArrayList<String> ladder = null;
 
         // Try going forward. If that fails, go backwards.
-        // If both fail, then give up
+        // If both fail, then search fails
         try{
             ladder = DFSHelper(startPoint, end, dict);
 
@@ -118,21 +120,23 @@ public class Main {
             }
         }
 
-        /*if(ladder == null){
-            ladder = new ArrayList<String>();
-            String out = ("no word ladder can be found between " 
-                    + start.toLowerCase() + " and " + end.toLowerCase() + ".");
-            ladder.add(out);
-        }*/
-
         return ladder;
 	}
 
-	public static ArrayList<String> DFSHelper(StringBuilder start, String end, Set<String> dict){
+	/**
+     * Helper function for the recursive call for DFS.
+     * @param start The word used for the start of the search
+     * @param end The word to be searched for
+     * @param dict The dictionary to be used for the search
+     * @return A word ladder between the two if found, else an empty ArrayList.
+     */
+	private static ArrayList<String> DFSHelper(StringBuilder start, String end, Set<String> dict){
+
 		ArrayList <String> ladder = null;
 		boolean found = false;
 
         // If start equals end, finish
+        // If not, search. Removes words from dict as their paths are tried.
 		if(start.toString().equals(end)){
 			ladder=new ArrayList<String>();
 			ladder.add(end);
@@ -142,7 +146,7 @@ public class Main {
                 StringBuilder next = new StringBuilder(start.toString());
                 next.setCharAt(i, end.charAt(i));
 
-                //If a given word is in dicitonary, try going along that path
+                //If a given word is in dictionary, try going along that path
                 if(dict.contains(next.toString())){
                     dict.remove(next.toString());
                     ladder = DFSHelper(next, end, dict);
@@ -161,7 +165,7 @@ public class Main {
 
                     next.setCharAt(i, (char)('A' + j));
                     
-                    //If a given word is in dicitonary, try going along that path
+                    //If a given word is in dictionary, try going along that path
                     if(dict.contains(next.toString())){
 						dict.remove(next.toString());
                         ladder = DFSHelper(next, end, dict);
@@ -179,6 +183,12 @@ public class Main {
         return ladder;
 	}
 	
+	/**
+     * Performs a breadth first search on two given words for a word ladder between them.
+     * @param start The word used for the start of the search
+     * @param end The word to be searched for
+     * @return A word ladder between the two if found, else an empty ArrayList.
+     */
     public static ArrayList<String> getWordLadderBFS(String start, String end) {
 		
     	ArrayList<String> queue = new ArrayList<String>();
@@ -192,22 +202,29 @@ public class Main {
 		parents.put(start, "");
 		
     	if(!currentLadder.toString().equals(end)){
-
-	    	while( (parents.get(end) == null) && !found && (start.length() == end.length()) ){  //change condition
+            // While not found and there are more words to search, keep searching
+	    	while( (parents.get(end) == null) && !found && (start.length() == end.length()) ){
+                // Go through all possible words
 	    		for(int i = 0; i<currentLadder.length() && !found; i++){
 	    			for(int j = 0; j < LETTERS_IN_ALPHABET && !found; j++){
 	    				StringBuilder next = new StringBuilder(letSee);
 	
 	    				next.setCharAt(i, (char)('A' + j));
-						if(dict.contains(next.toString()) && (parents.get(next.toString()) == null) && !queue.contains(next.toString())){
+
+                        // If a given word is in dict, add it to queue
+						if(dict.contains(next.toString()) && (parents.get(next.toString()) == null)
+                                && !queue.contains(next.toString())){
+
 	    					 queue.add(next.toString());		//adds all combinations(adjacent)
 							 parents.put(next.toString(), letSee);
                              if(next.toString().equals(end)){
                                  found = true;
-						 }
+                             }
 	    				 }
 	    			}
 	    		}
+
+                // If queue isn't empty, try again. Else no path found
                 if(!queue.isEmpty()){
                     letSee = queue.remove(0);
                 } else {
@@ -216,6 +233,7 @@ public class Main {
 	    	}
     	}
 
+        // Construct path based on search using parents of words in search
 		ArrayList<String> ladder = new ArrayList<String>();
         if(found){
 			ladder.add(end);
@@ -226,14 +244,15 @@ public class Main {
 			}
 			Collections.reverse(ladder);
         } else {
-		ladder = null;
-            /*ladder = new ArrayList<String>();
-            String out = ("no word ladder can be found between " + start.toLowerCase() + " and " + end.toLowerCase() + ".");
-            ladder.add(out);*/
+            ladder = null;
         }
     	return ladder; 
     }
-    
+
+    /**
+     * Creates a dictionary from a text file.
+     * @return a Set containing all the words in the text file
+     */
 	public static Set<String>  makeDictionary () {
 		Set<String> words = new HashSet<String>();
 		Scanner infile = null;
@@ -250,8 +269,12 @@ public class Main {
 		return words;
 	}
 	
+    /**
+     * Prints out a given ladder found by a search function to standard output.
+     * @param ladder The ladder to be printed
+     */
 	public static void printLadder(ArrayList<String> ladder) {
-        if(ladder != null){
+        if(ladder.size() > 0){
             System.out.println("a " + (ladder.size() - 2) + "-rung word ladder exists between " 
                     + ladder.get(0).toLowerCase() + " and " 
                     + ladder.get(ladder.size() - 1).toLowerCase() + ".");
@@ -260,7 +283,8 @@ public class Main {
                 System.out.println(e.toLowerCase());
             }
         } else {
-            System.out.println("no word ladder can be found between " + INPUT1.toLowerCase() + " and " + INPUT2.toLowerCase() + ".");
+            System.out.println("no word ladder can be found between " + INPUT1.toLowerCase()
+                    + " and " + INPUT2.toLowerCase() + ".");
         }
 
     }
