@@ -124,6 +124,11 @@ public class Main {
             ladder.add(start);
         }
 
+        if(ladder == null){
+            ladder = new ArrayList<String>();
+        }
+
+
         return ladder;
     }
 
@@ -248,7 +253,7 @@ public class Main {
             }
             Collections.reverse(ladder);
         } else {
-            ladder = null;
+            ladder = new ArrayList<String>();
         }
         return ladder; 
     }
